@@ -5,9 +5,11 @@ The schematic below shows the coordinate system (a) used to perform the angular 
 ![](TxTomography.png)
 
 Simulated receive signals are shown for 9 different views around the medium:
+
 ![](FullWaveformSetup.png)
 
 When FWI is used to reconstruct the speed of sound in the medium, here are the results after 12 iterations:
+
 ![](GithubResultsFigure.png)
 
 If you use the code/algorithm for research, please cite the SPIE conference proceedings paper: 
