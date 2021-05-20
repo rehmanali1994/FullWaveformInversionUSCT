@@ -11,7 +11,7 @@ If you use the code/algorithm for research, please cite the SPIE conference proc
 
 > Ali, R., Dahl, J. "Open-Source Full-Waveform Ultrasound Computed Tomography Based on the Angular Spectrum Method Using Linear Arrays". *Manuscript in preparation for SPIE Medical Imaging conference.*
 
-You can reference a static version of this code by its DOI number:
+You can reference a static version of this code by its DOI number: [![DOI](https://zenodo.org/badge/369032499.svg)](https://zenodo.org/badge/latestdoi/369032499)
 
 # Schematic of the Imaging System
 The schematic below shows the coordinate system (a) used to perform the angular spectrum method. This grid is rotated as the two linear arrays are (b) rotated around the medium to collect receive signals sampled from all angles by rotating a full a 360 degrees (in 2 degree steps) around the object of interest:
