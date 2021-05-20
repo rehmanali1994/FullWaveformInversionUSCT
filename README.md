@@ -2,7 +2,7 @@
 Full Waveform Inversion (FWI) for Transmission Ultrasound Computed Tomography with Transmitting and Receiving Linear Array Transducers based on the Angular Spectrum Method
 
 # Code and Sample Datasets
-**Please download the sample data (sim_breast.mat) under the [releases](https://github.com/rehmanali1994/FullWaveformInversionUSCT/releases) tab for this repository, and place that data in the ([MATLAB](https://github.com/rehmanali1994/FullWaveformInversionUSCT/MATLAB)) or ([Python](https://github.com/rehmanali1994/FullWaveformInversionUSCT/Python)) directories.**
+**Please download the sample data (sim_breast.mat) under the [releases](https://github.com/rehmanali1994/FullWaveformInversionUSCT/releases) tab for this repository, and place that data in the ([MATLAB](MATLAB)) or ([Python](Python)) directories.**
 
 From either the ([MATLAB](https://github.com/rehmanali1994/FullWaveformInversionUSCT/MATLAB)) or ([Python](https://github.com/rehmanali1994/FullWaveformInversionUSCT/Python)) directories, please run ([BreastTomography.m](https://github.com/rehmanali1994/FullWaveformInversionUSCT/MATLAB/BreastTomography.m)) or ([BreastTomography.py](https://github.com/rehmanali1994/FullWaveformInversionUSCT/Python/BreastTomography.py)) in order to run the FWI reconstruction of the simulated breast phantom
 
