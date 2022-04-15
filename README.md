@@ -9,7 +9,7 @@ From either the [MATLAB](MATLAB) or [Python](Python) directories, please run [Br
 # Citing this Work
 If you use the code/algorithm for research, please cite the SPIE conference proceedings paper: 
 
-> Ali, R., Dahl, J. "Open-Source Full-Waveform Ultrasound Computed Tomography Based on the Angular Spectrum Method Using Linear Arrays". *Manuscript in preparation for SPIE Medical Imaging conference.*
+> Ali, R. "Open-Source Full-Waveform Ultrasound Computed Tomography Based on the Angular Spectrum Method Using Linear Arrays". Medical Imaging 2022: Ultrasonic Imaging and Tomography. Vol. 12038. SPIE, 2022.
 
 You can reference a static version of this code by its DOI number: [![DOI](https://zenodo.org/badge/369032499.svg)](https://zenodo.org/badge/latestdoi/369032499)
 
