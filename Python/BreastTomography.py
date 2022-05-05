@@ -28,6 +28,8 @@ del freq_bins_used; del f; del P_f; del dt; del fs; del ff; del t; del tt;
 # Create Frequency-Domain Data for Tomography
 recording_x_f = np.zeros((xelem.size,fused.size,rotAngle.size)).astype('complex64');
 for rot_idx in np.arange(rotAngle.size):
+    random_scaling = (1e3)*np.tile(np.random.randn(1,fused.size) + 
+        1j*np.random.randn(1,fused.size), (xelem.size,1)); # Random Scaling at Each View Angle
     recording_x_f[:,:,rot_idx] = np.dot(recording_x_t[:,:,rot_idx],delays);
 del recording_x_t;
 
@@ -60,17 +62,22 @@ Nz = 601; z = np.linspace(-radial_span/2, radial_span/2, Nz);
 [X, Z] = np.meshgrid(x, z); # Grid for Slowness Model
 R = np.sqrt(X**2 + Z**2);
 
+# Scaling Conversion Factor from Simulation Grid to Reconstruction Grid
+dx = np.mean(np.diff(x)); dz = np.mean(np.diff(z)); dzi = dxi;
+grid_conv_factor = (dx/dxi) * (dz/dzi);
+
 # Used Background to Form Initial Guess
 _, _, _, c_bkgnd = soundSpeedPhantom();
 slowness = np.ones(X.shape)/c_bkgnd; # Initial Slowness Model
 
 # (Nonlinear) Conjugate Gradient
-Niter = 12; plt.figure(figsize=(16,6)); tpause = 1e-9;
+Niter = 30; plt.figure(figsize=(16,6)); tpause = 1e-9;
 search_dir = np.zeros((Nz,Nx)); # Conjugate Gradient Direction
 gradient_img_prev = np.zeros((Nz,Nx)); # Previous Gradient Image
 for iter in np.arange(Niter):
     # Step 1: Backprojection to Create Gradient Image
     gradient_img = np.zeros(slowness.shape);
+    scaling = np.zeros((rotAngle.size,fused.size)).astype('complex64'); # Source Scaling for Transmission
     ddwf_x_z_f_rot = np.zeros((Nzi,Nxi,fused.size,rotAngle.size)).astype('complex64');
     for rot_idx in np.arange(rotAngle.size):
         # Rotate Slowness Image to Compute Recorded Signals
@@ -82,6 +89,13 @@ for iter in np.arange(Niter):
             np.zeros((zi.size,xi.size,fused.size)), aawin);
         # Extract Forward Projected Data at Bottom
         forwardProject_x_f = dwf_x_z_f[-1,x_src_idx,:];
+        # Compute Scaling
+        for f_idx in np.arange(fused.size):
+            REC = recording_x_f[:,f_idx,rot_idx];
+            REC_SIM = forwardProject_x_f[:,f_idx]; 
+            scaling[rot_idx,f_idx] = np.inner(np.conj(REC_SIM),REC)/np.inner(np.conj(REC_SIM),REC_SIM);
+            forwardProject_x_f[:,f_idx] = scaling[rot_idx,f_idx] * forwardProject_x_f[:,f_idx];
+            dwf_x_z_f[:,:,f_idx] = scaling[rot_idx,f_idx] * dwf_x_z_f[:,:,f_idx];
         # Compute Residual
         residual_x_f = forwardProject_x_f-recording_x_f[:,:,rot_idx];
         res_x_f = np.zeros((xi.size, fused.size)).astype('complex64');
@@ -102,7 +116,8 @@ for iter in np.arange(Niter):
 
     # Step 2: Compute New Conjugate Gradient Search Direction from Gradient
     # Conjugate Gradient Direction Scaling Factor for Updates
-    if iter == 0:
+    nsteps_reset = 10; # Number of Steps After Which Search Direction is Reset
+    if (iter % nsteps_reset) == 0:
         beta = 0;
     else:
         betaPR = np.dot(gradient_img.flatten(), \
@@ -133,7 +148,7 @@ for iter in np.arange(Niter):
     perc_step_size = 0.25; # (<1/2) Introduced to Improve Compliance with Strong Wolfe Conditions
     alpha = -np.dot(gradient_img.flatten(),search_dir.flatten()) / \
         np.dot(drecording_x_f.flatten(),np.conj(drecording_x_f.flatten()));
-    slowness = slowness + perc_step_size * np.real(alpha) * search_dir;
+    slowness = slowness + perc_step_size * np.real(alpha) * grid_conv_factor * search_dir;
 
     # Compare Gradient Image to Ground Truth Sound Speed
     xg, zg, cg, _ = soundSpeedPhantom(); # Ground Truth Image
