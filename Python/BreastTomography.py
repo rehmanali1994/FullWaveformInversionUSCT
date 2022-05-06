@@ -17,7 +17,7 @@ array_separation = data_in['array_separation'][0,0];
 del data_in;
 
 # Time Axis and Sampling Frequency
-freq_bins_used = np.arange(0,f.size,10); # Frequency Bins Used
+freq_bins_used = np.arange(0,(f.size+1)/2,10); # Frequency Bins Used
 fused = f[freq_bins_used]; # Frequencies Used
 P_fused = P_f[freq_bins_used]; # Frequency Bins in Pulse
 dt = np.mean(np.diff(t)); fs = 1/dt; # Sampling Period [s] and Frequency [Hz]
@@ -71,7 +71,7 @@ _, _, _, c_bkgnd = soundSpeedPhantom();
 slowness = np.ones(X.shape)/c_bkgnd; # Initial Slowness Model
 
 # (Nonlinear) Conjugate Gradient
-Niter = 30; plt.figure(figsize=(16,6)); tpause = 1e-9;
+Niter = 12; plt.figure(figsize=(16,6)); tpause = 1e-9;
 search_dir = np.zeros((Nz,Nx)); # Conjugate Gradient Direction
 gradient_img_prev = np.zeros((Nz,Nx)); # Previous Gradient Image
 for iter in np.arange(Niter):
@@ -145,7 +145,7 @@ for iter in np.arange(Niter):
         drecording_x_f[:,:,rot_idx] = ddwf_x_z_f[-1,x_src_idx,:];
 
     # Step 4: Perform a Linear Approximation of Exact Line Search
-    perc_step_size = 0.25; # (<1/2) Introduced to Improve Compliance with Strong Wolfe Conditions
+    perc_step_size = 1; # (<1/2) Introduced to Improve Compliance with Strong Wolfe Conditions
     alpha = -np.dot(gradient_img.flatten(),search_dir.flatten()) / \
         np.dot(drecording_x_f.flatten(),np.conj(drecording_x_f.flatten()));
     slowness = slowness + perc_step_size * np.real(alpha) * grid_conv_factor * search_dir;
