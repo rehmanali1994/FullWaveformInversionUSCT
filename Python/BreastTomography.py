@@ -17,7 +17,7 @@ array_separation = data_in['array_separation'][0,0];
 del data_in;
 
 # Time Axis and Sampling Frequency
-freq_bins_used = np.arange(0,(f.size+1)/2,10); # Frequency Bins Used
+freq_bins_used = np.arange(0,int((f.size+1)/2),10); # Frequency Bins Used
 fused = f[freq_bins_used]; # Frequencies Used
 P_fused = P_f[freq_bins_used]; # Frequency Bins in Pulse
 dt = np.mean(np.diff(t)); fs = 1/dt; # Sampling Period [s] and Frequency [Hz]
