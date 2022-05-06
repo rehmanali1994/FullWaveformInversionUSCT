@@ -6,7 +6,7 @@ addpath(genpath(pwd));
 load('sim_breast.mat');
 
 % Time Axis and Sampling Frequency
-freq_bins_used = 1:10:(numel(f)+1/2); % Frequency Bins Used
+freq_bins_used = 1:10:(numel(f)+1)/2; % Frequency Bins Used
 fused = f(freq_bins_used); % Frequencies Used
 P_fused = P_f(freq_bins_used); % Frequency Bins in Pulse
 dt = mean(diff(t)); fs = 1/dt; % Sampling Period [s] and Frequency [Hz]
