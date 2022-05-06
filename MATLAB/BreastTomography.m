@@ -6,7 +6,7 @@ addpath(genpath(pwd));
 load('sim_breast.mat');
 
 % Time Axis and Sampling Frequency
-freq_bins_used = 1:10:numel(f); % Frequency Bins Used
+freq_bins_used = 1:10:(numel(f)+1/2); % Frequency Bins Used
 fused = f(freq_bins_used); % Frequencies Used
 P_fused = P_f(freq_bins_used); % Frequency Bins in Pulse
 dt = mean(diff(t)); fs = 1/dt; % Sampling Period [s] and Frequency [Hz]
@@ -61,7 +61,7 @@ grid_conv_factor = (dx/dxi) * (dz/dzi);
 slowness = ones(size(X))/c_bkgnd; % Initial Slowness Model
 
 % (Nonlinear) Conjugate Gradient
-Niter = 30; 
+Niter = 12; 
 search_dir = zeros(Nz,Nx); % Conjugate Gradient Direction
 gradient_img_prev = zeros(Nz,Nx); % Previous Gradient Image
 for iter = 1:Niter
@@ -125,7 +125,7 @@ end
 
 % Step 2: Compute New Conjugate Gradient Search Direction from Gradient
 % Conjugate Gradient Direction Scaling Factor for Updates
-nsteps_reset = 10; % Number of Steps After Which Search Direction is Reset
+nsteps_reset = 100; % Number of Steps After Which Search Direction is Reset
 if rem(iter,nsteps_reset) == 1
     beta = 0; 
 else 
@@ -154,7 +154,7 @@ for rot_idx = 1:numel(rotAngle)
 end
 
 % Step 4: Perform a Linear Approximation of Exact Line Search
-perc_step_size = 0.25; % (<=1/2) Introduced to Improve Compliance with Strong Wolfe Conditions 
+perc_step_size = 1; % (<=1/2) Introduced to Improve Compliance with Strong Wolfe Conditions 
 alpha = -(gradient_img(:)'*search_dir(:))/...
     (drecording_x_f(:)'*drecording_x_f(:));
 slowness = slowness + perc_step_size * alpha * grid_conv_factor * search_dir;
