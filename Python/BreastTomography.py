@@ -116,7 +116,7 @@ for iter in np.arange(Niter):
 
     # Step 2: Compute New Conjugate Gradient Search Direction from Gradient
     # Conjugate Gradient Direction Scaling Factor for Updates
-    nsteps_reset = 10; # Number of Steps After Which Search Direction is Reset
+    nsteps_reset = 100; # Number of Steps After Which Search Direction is Reset
     if (iter % nsteps_reset) == 0:
         beta = 0;
     else:
